@@ -1,0 +1,553 @@
+Script started on 2020-11-22 18:57:03-07:00
+]0;ahmad.almasri3@csa3:~/cpsc355/assignments/assignment4ahmad.almasri3@csa3:~/cpsc355/assignments/assignment4$ m4 assign4.asm > assign4.s
+]0;ahmad.almasri3@csa3:~/cpsc355/assignments/assignment4ahmad.almasri3@csa3:~/cpsc355/assignments/assignment4$ gcc assign4.s -g -o assign4
+]0;ahmad.almasri3@csa3:~/cpsc355/assignments/assignment4ahmad.almasri3@csa3:~/cpsc355/assignments/assignment4$ gdb assign4
+GNU gdb (GDB) Fedora 8.1.1-4.fc28
+Copyright (C) 2018 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "aarch64-redhat-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from assign4...done.
+(gdb) b main
+Breakpoint 1 at 0x400748: file assign4.s, line 67.
+(gdb) b allocation
+Breakpoint 2 at 0x4007cc: file assign4.s, line 138.
+(gdb) b fill
+Breakpoint 3 at 0x400824: file assign4.s, line 187.
+(gdb) b display
+Breakpoint 4 at 0x400898: file assign4.s, line 238.
+(gdb) b max
+Breakpoint 5 at 0x400914: file assign4.s, line 291.
+(gdb) b displayResult
+Breakpoint 6 at 0x4009e8: file assign4.s, line 395.
+(gdb) b stopDy
+Breakpoint 7 at 0x400a64: file assign4.s, line 451.
+(gdb) r 4 4
+Starting program: /home/ugb/ahmad.almasri3/cpsc355/assignments/assignment4/assign4 4 4
+warning: the debug information found in "/usr/lib/debug//usr/lib64/ld-2.27.so.debug" does not match "/lib/ld-linux-aarch64.so.1" (CRC mismatch).
+
+Missing separate debuginfos, use: dnf debuginfo-install glibc-2.27-38.fc28.aarch64
+warning: the debug information found in "/usr/lib/debug//lib64/libc-2.27.so.debug" does not match "/lib64/libc.so.6" (CRC mismatch).
+
+warning: the debug information found in "/usr/lib/debug//usr/lib64/libc-2.27.so.debug" does not match "/lib64/libc.so.6" (CRC mismatch).
+
+
+Breakpoint 1, main () at assign4.s:67
+67		stp	x29, x30, [sp, alloc]!
+(gdb) r 4 4[Kn
+68		mov	x29, sp
+(gdb) p $x29
+$1 = 281474976706832
+(gdb) p $x29[K[K[Kfp
+$2 = (void *) 0xfffffffff0c0
+(gdb) p $fpx29n[K
+72		mov	x19, x0				// argc
+(gdb) np $fp
+$3 = (void *) 0xfffffffff0c0
+(gdb) p $fpn[Kp $fp[1Ppsp
+$4 = (void *) 0xfffffffff0c0
+(gdb) n
+73		mov	x20, x1				// argv
+(gdb) n
+76		b	argc				// To argc
+(gdb) n
+argc () at assign4.s:122
+122		cmp	x19, 3				// compare x19 with 3
+(gdb) n
+123		b.eq	argv				// == 3 ? back to argv
+(gdb) p $x19
+$5 = 3
+(gdb) n
+argv () at assign4.s:81
+81		mov	w19, 1				// set x19 = 1
+(gdb) n
+84		ldr	x0, [x20, w19, sxtw 3]		// read first arg.
+(gdb) n
+85		bl	atoi				// call atoi
+(gdb) n
+86		str	w0, [x29, row]			// store row #
+(gdb) p $w0
+$6 = 4
+(gdb) n
+88		add	w19, w19, 1			// w19+= 1
+(gdb) n
+91		ldr	x0, [x20, w19, sxtw 3]		// read second arg.
+(gdb) n
+92		bl	atoi				// call atoi
+(gdb) n
+93		str	w0, [x29, col]			// store col #
+(gdb) p &[K$w0
+$7 = 4
+(gdb) n
+98		ldr	w19, [x29, row]			// get row
+(gdb) n
+99		cmp	w19, 4				// compare row with 4
+(gdb) n
+100		b.lt	wrong				// row < 4 ?? To wrong
+(gdb) n
+101		cmp	w19, 16				// compare row with 16
+(gdb) p $w19
+$8 = 4
+(gdb) n
+102		b.gt	wrong				// row > 16 ?? To wrong
+(gdb) n
+105		ldr	w19, [x29, col]			// get col
+(gdb) n
+106		cmp	w19, 4				// compare col with 4
+(gdb) p $w19
+$9 = 4
+(gdb) n
+107		b.lt	wrong				// col < 4 ?? To wrong
+(gdb) n
+108		cmp	w19, 16				// compare col with 16
+(gdb) n
+109		b.gt	wrong				// col > 16 ?? To col
+(gdb) n
+114		ldr	x0, =output0			// load output0 addr.
+(gdb) n
+115		ldr	w1, [x29, row]			// get row
+(gdb) n
+116		ldr	w2, [x29, col]			// get col
+(gdb) p[Kn
+117		bl	printf				// call printf
+(gdb) p $w1
+$10 = 4
+(gdb) p $w1[K2
+$11 = 4
+(gdb) n
+  Row = 4 && Col = 4 
+119		b	allocation			// To allocation
+(gdb) n
+
+Breakpoint 2, allocation () at assign4.s:138
+138		ldr	w19, [x29, row]			// get row
+(gdb) n
+139		ldr	w20, [x29, col]			// get col
+(gdb) p [K[Kn
+141		mul	w19, w19, w20			// row * col
+(gdb) p $w19
+$12 = 4
+(gdb) p $w19n[K
+142		lsl	w19, w19, 2			// row * col * 4
+(gdb) np $w19[K[K20
+$13 = 4
+(gdb) n
+145	        str     x19, [x29, size]			// store size (temporarily)
+(gdb) np $w20n[Kp $w19
+$14 = 64
+(gdb) n
+154		add	x20, x19, 4			// x19-->sizeof2darray + 4
+(gdb) n
+155		sub	x20, xzr, x20			// -(x20)
+(gdb) n
+156		str	x20, [x29, struct]		// store the offset
+(gdb) p $x20
+$15 = -68
+(gdb) n
+159		ldr	w19, [x29, row]			// load # of row
+(gdb) n
+160		lsl	w19, w19, 1			// row * 2
+(gdb) n
+161		lsl	w19, w19, 2			// row * 2 * 4
+(gdb) n
+166		ldr	x20, [x29, size]			// load size of 2D array
+(gdb) p $x20
+$16 = -68
+(gdb) p $x20[K[K19
+$17 = 32
+(gdb) n
+167		add	x19, x19, x20			// size of 2D-array & array of struct
+(gdb) n
+168		sub	x19, xzr, x19			// the whole Size *= -1	
+(gdb) n
+169		and	x19, x19, -16			// the whole size & -16
+(gdb) p $x19
+$18 = -96
+(gdb) n
+171		str	x19, [x29, size]			// update size at the stack
+(gdb) n
+173		add	sp, sp, x19			// update sp
+(gdb) p $sp
+$19 = (void *) 0xfffffffff0c0
+(gdb) n
+allocation () at assign4.s:177
+177		bl	clock				// call clock
+(gdb) np $sp
+$20 = (void *) 0xfffffffff060
+(gdb) n
+178		bl	srand				// call srand
+(gdb) n
+180		mov	w19, 0
+(gdb) n
+181		str	w19, [x29, i]			// update i
+(gdb) n
+182		str	w19, [x29, j]			// update j
+(gdb) n
+
+Breakpoint 3, fill () at assign4.s:187
+187		ldr	w19, [x29, i]			// get i
+(gdb) n
+188		ldr	w20, [x29, col]			// get col
+(gdb) n
+189		mul	w19, w19, w20			// i * col
+(gdb) $w[K x19
+Undefined command: "$".  Try "help".
+(gdb) $ x19[1@p[C[C[1Px19 $x19
+$21 = 0
+(gdb) p $x19[K[K20
+$22 = 4
+(gdb) n
+190		ldr	w20, [x29, j]			// get j
+(gdb) n
+191		add	w19, w19, w20			// (i*col) + j
+(gdb) p $x20
+$23 = 0
+(gdb) n
+192		lsl	w19, w19, 2			// [i*col+j]*4
+(gdb) n
+193		add	w19, w19, 4			// offset + 4
+(gdb) n
+194		sub	x19, xzr, x19			// x19 *= -1
+(gdb) n
+198		bl	rand
+(gdb) p $x19
+$24 = -4
+(gdb) n
+199		and	w20, w0, 15			// and rand with 15
+(gdb) n
+200		add	w20, w20, 1			// rand from 1 to 16
+(gdb) p $x20
+$25 = 12
+(gdb) n
+202		str	w20, [x29, x19]	         	// store w20 at x29+x19-4
+(gdb) n
+206		ldr	w19, [x29, j]			// get j
+(gdb) n
+207		add	w19, w19, 1			// j += 1
+(gdb) n
+208		str	w19, [x29, j]			// update j
+(gdb) n
+209		ldr	w20, [x29, col]			// get col
+(gdb) p[Kn
+211		cmp	w19, w20			// compare j with col
+(gdb) p $w19
+$26 = 1
+(gdb) p $w19[K[K20
+$27 = 4
+(gdb) n
+212		b.lt	fill				// j < col ?? To fill
+(gdb) infp[Ko breakpointd[Ks
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000000000400748 assign4.s:67
+	breakpoint already hit 1 time
+2       breakpoint     keep y   0x00000000004007cc assign4.s:138
+	breakpoint already hit 1 time
+3       breakpoint     keep y   0x0000000000400824 assign4.s:187
+	breakpoint already hit 1 time
+4       breakpoint     keep y   0x0000000000400898 assign4.s:238
+5       breakpoint     keep y   0x0000000000400914 assign4.s:291
+6       breakpoint     keep y   0x00000000004009e8 assign4.s:395
+7       breakpoint     keep y   0x0000000000400a64 assign4.s:451
+(gdb) disaple 2[1P[1@b
+(gdb) n
+
+Breakpoint 3, fill () at assign4.s:187
+187		ldr	w19, [x29, i]			// get i
+(gdb) c
+Continuing.
+
+Breakpoint 3, fill () at assign4.s:187
+187		ldr	w19, [x29, i]			// get i
+(gdb) c
+Continuing.
+
+Breakpoint 3, fill () at assign4.s:187
+187		ldr	w19, [x29, i]			// get i
+(gdb) c[Kcndisable 2[K3
+(gdb) n
+188		ldr	w20, [x29, col]			// get col
+(gdb) n
+189		mul	w19, w19, w20			// i * col
+(gdb) n
+190		ldr	w20, [x29, j]			// get j
+(gdb) n
+191		add	w19, w19, w20			// (i*col) + j
+(gdb) n
+192		lsl	w19, w19, 2			// [i*col+j]*4
+(gdb) c
+Continuing.
+
+Breakpoint 4, display () at assign4.s:238
+238	        ldr     w19, [x29, i]                    // get i
+(gdb) x/16d x29--64[1P64
+No symbol "x29" in current context.
+(gdb) x/16d x29-64$x29-64
+0xfffffffff080:	10	6	1	12
+0xfffffffff090:	4	7	4	2
+0xfffffffff0a0:	6	10	13	11
+0xfffffffff0b0:	5	11	10	13
+(gdb) n
+239	        ldr     w20, [x29, col]                  // get col
+(gdb) n
+240	        mul     w19, w19, w20                   // i * col
+(gdb) n
+241	        ldr     w20, [x29, j]                    // get j
+(gdb) n
+242	        add     w19, w19, w20                   // (i*col) + j
+(gdb) n
+243	        lsl     w19, w19, 2                     // [i*col+j]*4
+(gdb) n
+244		add	w19, w19, 4			// offset + 4
+(gdb) n
+245	        sub     x19, xzr, x19                   // x19 *= -1
+(gdb) n
+249		ldr	x0, =output1			// load output1 addr.
+(gdb) n[Kn[Kp $x19
+$28 = -4
+(gdb) n
+250	        ldr     w1, [x29, x19]                   // get array[i][j]
+(gdb) n
+251		bl	printf				// call printf
+(gdb) n
+255	        ldr     w19, [x29, j]                    // get j
+(gdb) n
+256	        add     w19, w19, 1                     // j += 1
+(gdb) n
+257	        str     w19, [x29, j]                    // update j
+(gdb) n
+259	        ldr     w20, [x29, col]                  // get col
+(gdb) n
+261	        cmp     w19, w20                        // compare j with col
+(gdb) n
+262	        b.lt    display				// j < col ?? To display
+(gdb) p $w19
+$29 = 1
+(gdb) p $w19n[Kp $w19[K[K20
+$30 = 4
+(gdb) n
+
+Breakpoint 4, display () at assign4.s:238
+238	        ldr     w19, [x29, i]                    // get i
+(gdb) disable 4
+(gdb) c
+Continuing.
+ 13  10  11   5 
+ 11  13  10   6 
+  2   4   7   4 
+ 12   1   6  10 
+
+Breakpoint 5, max () at assign4.s:291
+291	        ldr     w19, [x29, i]                    // get i
+(gdb) x/16 $x29-d $x29-[C[C[C[C[C[C64
+0xfffffffff080:	10	6	1	12
+0xfffffffff090:	4	7	4	2
+0xfffffffff0a0:	6	10	13	11
+0xfffffffff0b0:	5	11	10	13
+(gdb) n
+292	        ldr     w20, [x29, col]                  // get col
+(gdb) n
+293	        mul     w19, w19, w20                   // i * col
+(gdb) n
+294	        ldr     w20, [x29, j]                    // get j
+(gdb) n
+295	        add     w19, w19, w20                   // (i*col) + j
+(gdb) n
+296	        lsl     w19, w19, 2                     // [i*col+j]*4
+(gdb) 
+297	        add     w19, w19, 4                     // offset + 4
+(gdb) n
+298	        sub     x19, xzr, x19                   // x19 *= -1
+(gdb) n
+300		ldr	w19, [x29, x19]			// get array[i][j]
+(gdb) n
+305		ldr	w20, [x29, sum]			// get sum
+(gdb) n[Kp $w19
+$31 = 13
+(gdb) n
+306		add	w20, w19, w20			// sum+=array[i][j]
+(gdb) np $w19[K[K20
+$32 = 0
+(gdb) n
+307		str	w20, [x29,sum]			// update sum
+(gdb) n[Knp $w20
+$33 = 13
+(gdb) n
+311		ldr     w20, [x29, j]                    // get j
+(gdb) n
+312	        cmp     w20, 0                          // compare j with 0
+(gdb) n
+313	        b.eq    strValue                        // == 0 ? To strValue	
+(gdb) n
+strValue () at assign4.s:327
+327		str	w19, [x29, maxVal]		// maxVal = array[i][j]
+(gdb) n
+330		ldr	w19, [x29, j]
+(gdb) n
+331		str	w19, [x29, index]		// index = j
+(gdb) n[Kp $x19
+$34 = 0
+(gdb) n
+maxJ () at assign4.s:336
+336	        ldr     w19, [x29, j]                    // get j
+(gdb) n
+337	        add     w19, w19, 1                     // j += 1
+(gdb) n
+338	        str     w19, [x29, j]                    // update j
+(gdb) n
+340	        ldr     w20, [x29, col]                  // get col
+(gdb) n
+342	        cmp     w19, w20                        // compare j with col
+(gdb) n
+343	        b.lt    max
+(gdb) n
+
+Breakpoint 5, max () at assign4.s:291
+291	        ldr     w19, [x29, i]                    // get i
+(gdb) disable 5
+(gdb) c
+Continuing.
+
+Breakpoint 6, displayResult () at assign4.s:395
+395		ldr	w19, [x29, i]			// get i
+(gdb) p [K[Kx/[K[Kx[Kx/1d $x28[K9+28
+0xfffffffff0dc:	4
+(gdb) x/1d $x29+28[K[K36
+0xfffffffff0e4:	0
+(gdb) x/1d $x29+36[K2
+0xfffffffff0e0:	12
+(gdb) n
+396		lsl	w19, w19, 3			// i * 8
+(gdb) p[Kx/24d $x29-96
+0xfffffffff060:	41	0	41	2
+0xfffffffff070:	32	1	33	0
+0xfffffffff080:	10	6	1	12
+0xfffffffff090:	4	7	4	2
+0xfffffffff0a0:	6	10	13	11
+0xfffffffff0b0:	5	11	10	13
+(gdb) n
+397		sub	x19, xzr, x19			// x19 *= -1
+(gdb) n
+398		ldr	x20, [x29, struct]	        // get struct
+(gdb) n
+399		add	x19, x19, x20			// struct[i] offset
+(gdb) n
+404		ldr	w21, [x29, x19]		// get Index
+(gdb) n[Kp $x19
+$35 = -68
+(gdb) n
+405		add	x19, x19, -4			// update offset by -4 
+(gdb) n
+406		ldr	w22, [x29, x19]		// get freq.
+(gdb) np $x19
+$36 = -72
+(gdb) n
+411	        ldr     w19, [x29, i]                    // get i
+(gdb) p $w22
+$37 = 33
+(gdb) n
+412	        ldr     w20, [x29, col]                  // get col
+(gdb) n
+413	        mul     w19, w19, w20                   // i * col
+(gdb) p $[K[K[Kn
+414	        add     w19, w19, w21                 // (i*col) + j
+(gdb) n
+415	        lsl     w19, w19, 2                     // [i*col+j]*4
+(gdb) n
+416	        add     w19, w19, 4                     // offset + 4
+(gdb) n
+417	        sub     x19, xzr, x19                   // x19 *= -1
+(gdb) p $w19
+$38 = 4
+(gdb) p $w19n[K
+419		ldr	w19, [x29, x19]			// get Occurrences
+(gdb) x/1d $x29-4
+0xfffffffff0bc:	13
+(gdb) n
+424		ldr	x0, =output2			// load output2
+(gdb) n
+425		mov	w1, w21			// Index
+(gdb) n
+426		mov	w2, w19				// Occurrences
+(gdb) n
+427		mov	w3, w22			// Frequency
+(gdb) n
+428		bl	printf				// call printf
+(gdb) n
+ Index = 0 , Occurrences = 13 , Frequency = 33 
+
+
+Breakpoint 6, displayResult () at assign4.s:395
+395		ldr	w19, [x29, i]			// get i
+(gdb) b[Kdisable 6
+(gdb) c
+Continuing.
+ Index = 1 , Occurrences = 13 , Frequency = 32 
+
+ Index = 2 , Occurrences = 7 , Frequency = 41 
+
+ Index = 0 , Occurrences = 12 , Frequency = 41 
+
+
+Breakpoint 7, stopDy () at assign4.s:451
+451		ldr	x19, [x29, size]			// load the size
+(gdb) p[Kx/1d $x29-68
+0xfffffffff07c:	0
+(gdb) x/1d $x29-68[K[K68-4
+0xfffffffff078:	33
+(gdb) x/1d $x29-68-4[K-[K4-4
+0xfffffffff074:	1
+(gdb) x/1d $x29-68-4-4-4
+0xfffffffff070:	32
+(gdb) x/1d $x29-68-4-4-4[K[K[K[K[K12-4
+0xfffffffff06c:	2
+(gdb) x/1d $x29-68-12-4[K[K[K6-4
+0xfffffffff068:	41
+(gdb) x/10d $x29[C[C[C[C[C[C
+0xfffffffff0c0:	-3824	65535	-1084900956	65535
+0xfffffffff0d0:	4	0	4	4
+0xfffffffff0e0:	12	0
+(gdb) x/10d $x29-6[K96[1P[1P[1@1[1P[1@2[1@4
+0xfffffffff060:	41	0	41	2
+0xfffffffff070:	32	1	33	0
+0xfffffffff080:	10	6	1	12
+0xfffffffff090:	4	7	4	2
+0xfffffffff0a0:	6	10	13	11
+0xfffffffff0b0:	5	11	10	13
+(gdb) n
+452		sub	x19, xzr, x19			// -(size)
+(gdb) n
+453		add	sp, sp, x19			// update sp
+(gdb) p $x19
+$39 = 96
+(gdb) p $x19[K[K[Ksp
+$40 = (void *) 0xfffffffff060
+(gdb) n
+stop () at assign4.s:455
+455		ldp	x29, x30, [sp], dealloc		// restore x29, x30
+(gdb) np $sp
+$41 = (void *) 0xfffffffff0c0
+(gdb) n
+stop () at assign4.s:456
+456		ret					// stop the prog.
+(gdb) n
+0x0000ffffbf55b9a4 in __libc_start_main () from /lib64/libc.so.6
+(gdb) n
+Single stepping until exit from function __libc_start_main,
+which has no line number information.
+[Inferior 1 (process 25071) exited with code 01]
+(gdb) n
+The program is not being run.
+(gdb) q
+]0;ahmad.almasri3@csa3:~/cpsc355/assignments/assignment4ahmad.almasri3@csa3:~/cpsc355/assignments/assignment4$ exit
+exit
+
+Script done on 2020-11-22 19:22:24-07:00
